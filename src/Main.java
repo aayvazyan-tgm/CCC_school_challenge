@@ -1,16 +1,45 @@
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println(areTheySpecial(pointsCast(4,1,1,3,2,3,3,3,1)));
-        System.out.println(areTheySpecial(pointsCast(10, 9, 6, 7, 8, 3, 1, 6, 9, 2, 2, 10, 3, 3, 10, 8, 1, 6, 10, 4, 3)));
-        System.out.println(areTheySpecial(pointsCast(25, 14, 8, 14, 5, 13, 25, 1, 5, 13, 7, 16, 7, 9, 21, 11, 13, 5, 24, 9, 1, 10, 23, 1, 14, 18, 3, 20, 7, 4, 6, 22, 14, 2, 23, 18, 11, 3, 5, 14, 3, 23, 10, 7, 14, 17, 2, 8, 16, 5, 17)));
-        System.out.println(areTheySpecial(pointsCast(50, 7, 4, 8, 9, 2, 5, 2, 9, 3, 10, 5, 9, 5, 3, 10, 7, 1, 9, 4, 5, 4, 4, 3, 3, 8, 2, 4, 2, 4, 3, 8, 4, 6, 8, 2, 6, 9, 6, 8, 5, 9, 7, 7, 8, 6, 9, 10, 5, 9, 3, 3, 9, 8, 8, 3, 5, 3, 7, 6, 10, 10, 9, 9, 10, 3, 1, 7, 3, 5, 2, 9, 2, 7, 9, 8, 1, 10, 2, 4, 1, 5, 6, 5, 7, 7, 10, 1, 3, 2, 4, 1, 7, 9, 1, 10, 3, 2, 2, 5, 5)));
-        System.out.println(areTheySpecial(pointsCast(99, 8, 17, 9, 16, 17, 14, 2, 4, 17, 9, 7, 14, 4, 10, 10, 1, 10, 9, 4, 3, 9, 4, 7, 12, 7, 10, 15, 19, 16, 20, 18, 16, 19, 10, 1, 9, 15, 16, 19, 11, 1, 1, 19, 7, 1, 8, 7, 4, 4, 13, 16, 19, 19, 16, 14, 20, 7, 3, 18, 2, 4, 15, 8, 11, 9, 12, 20, 7, 15, 9, 13, 9, 4, 11, 8, 3, 20, 2, 17, 19, 10, 19, 2, 18, 12, 2, 2, 15, 11, 7, 15, 7, 5, 13, 14, 19, 17, 20, 2, 13, 2, 16, 17, 8, 8, 13, 3, 8, 15, 12, 2, 2, 9, 3, 1, 7, 7, 11, 2, 14, 16, 14, 6, 4, 18, 9, 11, 3, 13, 3, 17, 5, 1, 2, 18, 11, 3, 2, 16, 11, 9, 1, 1, 16, 4, 4, 3, 1, 12, 9, 8, 8, 1, 19, 19, 17, 10, 2, 8, 4, 16, 8, 3, 7, 3, 10, 13, 10, 20, 15, 19, 2, 3, 15, 6, 19, 19, 6, 15, 6, 1, 20, 20, 13, 17, 12, 11, 11, 10, 7, 7, 20, 8, 15, 15, 5, 4, 12)));
-
+        System.out.println(initFile("in.1"));
+        System.out.println(initFile("in.2"));
+        System.out.println(initFile("in.3"));
+        System.out.println(initFile("in.4"));
+        System.out.println(initFile("in.5"));
+        System.out.println(initFile("in.6"));
     }
+    public static Point initFile(String filePath){
+        Point initPoint;
+        Point result=new Point(0,0);
+        LinkedList<Point> xPoints=new LinkedList<Point>();
+        LinkedList<Point> yPoints=new LinkedList<Point>();
 
+        File f = new File(filePath);
+        if(f.exists()){
+            Scanner scanner = null;
+            try {
+                scanner = new Scanner(f);
+                scanner.nextInt();//Total number
+                initPoint=new Point(scanner.nextInt(), scanner.nextInt());
+                while(scanner.hasNextInt()){
+                    Point cur=new Point(scanner.nextInt(),scanner.nextInt());
+                    if(cur.x==initPoint.x)xPoints.add(cur);
+                    if(cur.y==initPoint.y)yPoints.add(cur);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }else{
+            System.out.println("File not found!");
+        }
+        return new Point(xPoints.size(),yPoints.size());
+    }
     public static Point[] pointsCast(int... points) {
         Point[] result = new Point[points.length / 2];
         for (int i = 1; i < points.length; i += 2) {//=1 because value 1 is the number of xy pairs
