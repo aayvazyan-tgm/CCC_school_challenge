@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -14,32 +16,54 @@ public class Main {
         System.out.println(initFile("in.5"));
         System.out.println(initFile("in.6"));
     }
-    public static Point initFile(String filePath){
-        Point initPoint;
-        Point result=new Point(0,0);
-        LinkedList<Point> xPoints=new LinkedList<Point>();
-        LinkedList<Point> yPoints=new LinkedList<Point>();
+
+    public static long initFile(String filePath) {
+        HashMap<Integer, LinkedList<Point>> myMapSystemX = new HashMap<Integer, LinkedList<Point>>();
+        HashMap<Integer, LinkedList<Point>> myMapSystemY = new HashMap<Integer, LinkedList<Point>>();
 
         File f = new File(filePath);
-        if(f.exists()){
+        if (f.exists()) {
             Scanner scanner = null;
             try {
                 scanner = new Scanner(f);
-                scanner.nextInt();//Total number
-                initPoint=new Point(scanner.nextInt(), scanner.nextInt());
-                while(scanner.hasNextInt()){
-                    Point cur=new Point(scanner.nextInt(),scanner.nextInt());
-                    if(cur.x==initPoint.x)xPoints.add(cur);
-                    if(cur.y==initPoint.y)yPoints.add(cur);
+                int totalValues = scanner.nextInt();//Total number
+                while (scanner.hasNextInt()) {
+                    Point cur = new Point(scanner.nextInt(), scanner.nextInt());
+                    LinkedList<Point> mapxV = myMapSystemX.get(cur.x);
+                    if (mapxV == null) {
+                        LinkedList<Point> nL = new LinkedList<Point>();
+                        nL.add(cur);
+                        myMapSystemX.put(cur.x, nL);
+                    } else {
+                        mapxV.add(cur);
+                    }
+                    LinkedList<Point> mapyV = myMapSystemY.get(cur.y);
+                    if (mapyV == null) {
+                        LinkedList<Point> nL = new LinkedList<Point>();
+                        nL.add(cur);
+                        myMapSystemY.put(cur.y, nL);
+                    } else {
+                        mapyV.add(cur);
+                    }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             System.out.println("File not found!");
         }
-        return new Point(xPoints.size(),yPoints.size());
+        //do the processing
+        long result = 0;
+        for (LinkedList<Point> curPoint : myMapSystemX.values()) {
+            for (Point myP : curPoint) {
+                if (myMapSystemY.get(myP.y).size() == 0) continue;
+                if (myMapSystemY.get(myP.y).size() == 0) continue;
+                result += ((long)(myMapSystemX.get(myP.x).size() - 1) )*((long)myMapSystemY.get(myP.y).size() - 1);
+            }
+        }
+        return result;
     }
+
     public static Point[] pointsCast(int... points) {
         Point[] result = new Point[points.length / 2];
         for (int i = 1; i < points.length; i += 2) {//=1 because value 1 is the number of xy pairs
@@ -54,13 +78,13 @@ public class Main {
             for (int j = 0; j < p.length; j++) {
                 for (int k = 0; k < p.length; k++) {
                     if (i == k || i == j || j == k) continue;
-                    if (isSpecial(p[i], p[j], p[k])){
+                    if (isSpecial(p[i], p[j], p[k])) {
                         result++;
                     }
                 }
             }
         }
-        return result/6;
+        return result / 6;
     }
 
     public static boolean isSpecial(Point... p) {
