@@ -2,7 +2,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -58,7 +57,7 @@ public class Main {
             for (Point myP : curPoint) {
                 if (myMapSystemY.get(myP.y).size() == 0) continue;
                 if (myMapSystemY.get(myP.y).size() == 0) continue;
-                result += ((long)(myMapSystemX.get(myP.x).size() - 1) )*((long)myMapSystemY.get(myP.y).size() - 1);
+                result += ((long) (myMapSystemX.get(myP.x).size() - 1)) * ((long) myMapSystemY.get(myP.y).size() - 1);
             }
         }
         return result;
